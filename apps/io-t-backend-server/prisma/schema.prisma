@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model InternetStatus {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  status    Boolean?
+  updatedAt DateTime @updatedAt
+}
+
+model Measurement {
+  averageBloodGlucoseLevel     Float?
+  averageHeartRate             Int?
+  averageOxygenSaturationLevel Float?
+  bloodGlucoseLevel            Float?
+  createdAt                    DateTime  @default(now())
+  heartRate                    Int?
+  id                           String    @id @default(cuid())
+  oxygenSaturationLevel        Float?
+  timestamp                    DateTime?
+  updatedAt                    DateTime  @updatedAt
+  user                         User?     @relation(fields: [userId], references: [id])
+  userId                       String?
+}
+
+model User {
+  age          Int?
+  createdAt    DateTime      @default(now())
+  email        String?       @unique
+  firstName    String?
+  id           String        @id @default(cuid())
+  lastName     String?
+  measurements Measurement[]
+  name         String?
+  password     String
+  roles        Json
+  sex          EnumUserSex?
+  updatedAt    DateTime      @updatedAt
+  username     String        @unique
+}
+
+enum EnumUserSex {
+  Option1
+}
